@@ -1,0 +1,32 @@
+{
+  "name": "new",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "src/index.js",
+  "dependencies": {
+    "moment": "2.24.0",
+    "prop-types": "15.7.2",
+    "react": "16.8.6",
+    "react-dnd": "9.2.1",
+    "react-dnd-html5-backend": "9.1.0",
+    "react-dom": "16.8.6",
+    "react-scripts": "3.0.1",
+    "styled-components": "5.0.0-beta.6-ej4"
+  },
+  "devDependencies": {
+    "typescript": "3.3.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
