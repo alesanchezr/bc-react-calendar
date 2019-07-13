@@ -42,14 +42,14 @@ const getDaysOfWeek = activeDate => {
 
 const getYAxis = events => {
   let axis = [];
-  let count = 0;
   for (let key in events) {
     axis.push({
-      index: count,
       label: key,
-      events: events[key]
+      events: events[key].map((e, i) => {
+        e.index = key + i;
+        return e;
+      })
     });
-    count++;
   }
 
   return axis;

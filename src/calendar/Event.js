@@ -74,20 +74,24 @@ const Horizon = ({ className, orientation, start, index }) => {
 const HorizonStyled = styled(Horizon)`
   position: absolute;
   z-index: 9;
-  width: 100%;
   font-size: 10px;
   font-weight: 900;
   text-align: center;
   margin: auto;
+  ${props => css`
+    ${props.orientation}: 0px;
+    width: ${["top", "bottom"].includes(props.orientation) ? "100%" : "auto"};
+  `}
   :hover {
     opacity: 0.2;
     height: 8px;
     background: black;
-    cursor: ns-resize;
+    ${props => css`
+      cursor: ${["top", "bottom"].includes(props.orientation)
+        ? "ns-resize"
+        : "ew-resize"};
+    `}
   }
-  ${props => css`
-    ${props.orientation}: 0px;
-  `}
 `;
 
 export const Event = ({ label, start, end, index }) => {

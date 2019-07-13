@@ -10,6 +10,7 @@ const Block = styled.div`
   background: #f1f1f1;
   box-sizing: border-box;
   border-bottom: 0.1px solid #bdbdbd;
+  font-size: 10px;
   position: relative;
   ${props =>
     props.direction === "horizontal"

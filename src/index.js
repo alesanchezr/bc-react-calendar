@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import "./styles.css";
 import CalendarView from "./calendar/index.js";
 import { simpleEvents, nestedEvents } from "./data";
 

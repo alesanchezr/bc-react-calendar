@@ -13,6 +13,7 @@ export const ItemTypes = {
 const Day = styled.div`
   box-sizing: border-box;
   background: blue;
+  font-size: 10px;
   border-right: 1px solid grey;
   display: flex;
   position: relative;
@@ -47,7 +48,7 @@ export const DayTimeline = ({ events, date, isActive, width }) => {
     return {
       start,
       end,
-      label: start.format("h:mm a"),
+      label: start.format("h:m a"),
       index: i,
       events: events.filter(
         e => e.start.isBetween(start, end) || e.start.isSame(start)
