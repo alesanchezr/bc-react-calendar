@@ -12,17 +12,17 @@ function App() {
           timeDirection="horizontal"
           onChange={() => null}
           dayDirection="vertical"
-          viewMode={"week"}
+          viewMode={"day"}
         />
       }
-      {/*
+      {
         <CalendarView
-        events={simpleEvents}
-        timeDirection="vertical"
-        dayDirection="horizontal"
-        viewMode={"week"}
+          events={simpleEvents}
+          timeDirection="vertical"
+          dayDirection="horizontal"
+          viewMode={"day"}
         />
-        */}
+      }
     </div>
   );
 }
