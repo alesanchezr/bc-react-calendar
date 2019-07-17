@@ -33,12 +33,12 @@ const getDayComponent = {
 };
 
 export const DayTimeline = ({ events, date, isActive, width, timesToShow }) => {
-    const { timeDirection, timeBlockMinutes, dayLabel } = useContext(CalendarContext);
+    const { timeDirection, dayLabel } = useContext(CalendarContext);
     const DayComponent = getDayComponent[timeDirection];
 
     const times = timesToShow.map(({ startTime,  endTime, ...rest }, i) => {
         const start = moment(date).set({ h: startTime.hours(), m: startTime.minutes() });
-        let end = moment(start).add(rest.timeBlockMinutes, "minutes");
+        let end = moment(date).set({ h: endTime.hours(), m: endTime.minutes() });
         return {
         start,
         end,

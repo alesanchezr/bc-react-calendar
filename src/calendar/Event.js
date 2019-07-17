@@ -2,8 +2,7 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 import { CalendarContext } from "./Calendar";
-import { useDrag, useDrop } from "react-dnd";
-import moment from "moment";
+import { useDrag } from "react-dnd";
 export const ItemTypes = {
   EVENT: "event",
   HORIZON_TOP: "event-horizon-top",
@@ -56,7 +55,7 @@ const Invisible = styled.div`
 `;
 
 const Horizon = ({ className, orientation, eventStart, eventEnd, duration, index }) => {
-    const { dragMode, toggleDragMode, showPreview } = useContext(CalendarContext);
+    const { toggleDragMode } = useContext(CalendarContext);
     const [props, drag] = useDrag({
         item: {
             type: ["top", "left"].includes(orientation)
@@ -68,10 +67,7 @@ const Horizon = ({ className, orientation, eventStart, eventEnd, duration, index
             end: eventEnd,
             duration
         },
-        begin: monitor => {
-            console.log("Horizon: Drag begins");
-            if(showPreview) toggleDragMode(true);
-        }
+        begin: monitor => toggleDragMode(true)
     });
     return (
         <div ref={drag} className={className}>
@@ -104,18 +100,15 @@ const HorizonStyled = styled(Horizon)`
 `;
 
 export const Event = ({ label, start, end, duration, index, isPreview, offset }) => {
-    const { timeDirection, blockPixelSize, timeBlockMinutes, dragMode, toggleDragMode, showPreview } = useContext(CalendarContext);
-    const [{ isDragging }, drag, preview] = useDrag({
+    const { timeDirection, blockPixelSize, timeBlockMinutes, toggleDragMode } = useContext(CalendarContext);
+    const [{ isDragging }, drag ] = useDrag({
         item: { type: ItemTypes.EVENT, index, duration, start, end },
         collect: monitor => {
             return ({
                 isDragging: !!monitor.isDragging()
             })
         },
-        begin: monitor => {
-            console.log("Event: Drag begins: ", monitor.getInitialClientOffset());
-            if(showPreview) toggleDragMode(true);
-        },
+        begin: monitor => toggleDragMode(true)
     });
 
     return (

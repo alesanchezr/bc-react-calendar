@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
+import styled,{ css } from "styled-components";
 import { DndProvider } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 import { HorizontalDay } from "./HorizontalDay";
@@ -13,11 +13,26 @@ export const CalendarContext = React.createContext(null);
 // centered, palevioletred and sized at 1.5em
 const Frame = styled.div`
   box-sizing: border-box;
-  border: 1px solid black;
   width: 100%;
   overflow-y: auto;
   display: flex;
   justify-content: space-evenly;
+`;
+
+const Time = styled.ul`
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    background: #b1b1b1;
+    li{
+        display: inline-block;
+        list-style: none;
+    }
+    ${props => css`
+        margin-left: ${props.yAxisWidth}px;
+        width: ${props.width}px;
+    `}
 `;
 
 const getLayout = {
@@ -58,8 +73,6 @@ export const Calendar = ({ daysToShow, events, onChange, ...rest }) => {
         time: rest.timeDirection
     });
 
-    console.log("Calendar setup", rest);
-    console.log("Evens", calendarEvents);
     if (Array.isArray(calendarEvents)) {
         if (calendarEvents.length > 0 && typeof calendarEvents[0].index === 'undefined')
         setCalendarEvents(calendarEvents.map((e, i) => ({ index: i, duration: moment.duration(e.end.diff(e.start)).asMinutes(), ...e })));
@@ -94,7 +107,6 @@ export const Calendar = ({ daysToShow, events, onChange, ...rest }) => {
                 toggleDragMode: (value=null) => value ? setDragMode(value) : setDragMode(!dragMode),
                 updateEvent: uEv => {
                 if (onChange) {
-                    console.log("Event updated to: ", uEv);
                     onChange(uEv);
                     const newEvents =
                     yAxis.length === 0
@@ -121,13 +133,15 @@ export const Calendar = ({ daysToShow, events, onChange, ...rest }) => {
                 <div>
 
                     {daysToShow.map((d,i) =>
-                        <div>
+                        <div key={i}>
                             {rest.dayLabel &&
-                                <div style={{ width: (60 * 24) / rest.timeBlockMinutes * rest.blockPixelSize, background: "blue", marginLeft: i === 0 ? rest.yAxisWidth+"px": "0" }}>
+                                <div style={{ width: (60 * 24) / rest.timeBlockMinutes * rest.blockPixelSize, marginLeft: i === 0 ? rest.yAxisWidth+"px": "0" }}>
                                     {rest.dayLabel(d, moment(activeDate).add(1, "day").isSame(d))}
                                 </div>
                             }
-                            {rest.blockLabel && times.map(rest.blockLabel)}
+                            <Time yAxisWidth={rest.yAxisWidth} width={(60 * 24) / rest.timeBlockMinutes * rest.blockPixelSize}>
+                                {times.map((t, i) => <li key={i} style={{ width: rest.blockPixelSize+"px" }}>{t.startTime.minutes() === 0 && t.startTime.format('ha')}</li>)}
+                            </Time>
                         </div>
                     )}
                     <HorizontalDay
@@ -156,8 +170,16 @@ Calendar.propTypes = {
   timeBlockMinutes: PropTypes.number,
   dayWidth: PropTypes.string,
   yAxisWidth: PropTypes.number,
-  dayLabel: PropTypes.node,
-  blockLabel: PropTypes.node
+  showFrom: PropTypes.number,
+  showUntil: PropTypes.number,
+  blockLabel: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.node
+  ]),
+  dayLabel: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.node
+  ]),
 };
 
 Calendar.defaultProps = {

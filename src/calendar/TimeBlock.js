@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 import { CalendarContext } from "./Calendar";
 import { useDrop } from "react-dnd";
 import moment from "moment";
-import { ItemTypes, Event } from "./Event";
+import { ItemTypes } from "./Event";
 
 const Block = styled.div`
   box-sizing: border-box;
@@ -50,7 +50,6 @@ export const TimeBlock = ({ children, label, events, occupancy, start, end }) =>
             let coord = monitor.getDifferenceFromInitialOffset();
             const minutesDelta = timeDirection === "horizontal" ? Math.round(coord.x / blockPixelSize) * timeBlockMinutes : Math.round(coord.y / blockPixelSize) * timeBlockMinutes;
             const newEvent = calculateNewEvent({ start, end }, minutesDelta, item, ItemTypes);
-            console.log("Newwwwww: ", timeDirection)
             let updatedEvent = { index: item.index, start: newEvent.start, end: newEvent.end, duration: newEvent.duration };
 
             if(showPreview) toggleDragMode(false);

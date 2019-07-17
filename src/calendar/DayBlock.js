@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import PropTypes from "prop-types";
 import { DayTimeline } from "./DayTimeline";
 import moment from "moment";
 import { CalendarContext } from "./Calendar";

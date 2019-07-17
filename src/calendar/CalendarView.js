@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import { Calendar } from "./Calendar.js";
 import moment from "moment";
 
@@ -24,7 +23,6 @@ export const CalendarView = ({
   viewMode,
   dayLabel,
   blockLabel,
-  timeBlockMinutes,
   yAxisWidth,
   activeDate
 }) => {
@@ -49,6 +47,8 @@ export const CalendarView = ({
                             activeDate={currentDate}
                             yAxisWidth={yAxisWidth}
                             blockLabel={blockLabel}
+                            showFrom={5}
+                            showUntil={24}
                         />
 
         </div>
@@ -62,8 +62,14 @@ CalendarView.propTypes = {
   events: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   timeBlockMinutes: PropTypes.number,
   yAxisWidth: PropTypes.number,
-  blockLabel: PropTypes.node,
-  dayLabel: PropTypes.node,
+  blockLabel: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.node
+  ]),
+  dayLabel: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.node
+  ]),
   activeDate: PropTypes.object,
 };
 

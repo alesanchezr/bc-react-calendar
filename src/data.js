@@ -6,6 +6,11 @@ export const simpleEvents = [
     label: "Server",
     start: NOW,
     end: moment(NOW).add(3, "hours")
+  },
+  {
+    label: "Chef",
+    start: moment(NOW).add(2, "hours"),
+    end: moment(NOW).add(3, "hours")
   }
 ];
 export const simpleEvents2 = [
