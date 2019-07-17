@@ -6,20 +6,18 @@ export const simpleEvents = [
     label: "Server",
     start: NOW,
     end: moment(NOW).add(3, "hours")
-  },
+  }
+];
+export const simpleEvents2 = [
   {
-    label: "Chef",
-    start: moment(NOW).add(1, "hours"),
-    end: moment(NOW).add(4, "hours")
-  },
-  {
-    label: "Chef",
-    start: moment(NOW).add(1, "day"),
-    end: moment(NOW).add(4, "day")
+    label: "Server",
+    start: NOW,
+    end: moment(NOW).add(3, "hours")
   }
 ];
 
 export const nestedEvents = {
   mario: simpleEvents,
-  juan: simpleEvents
+  pepe: simpleEvents2,
+  //juan: simpleEvents
 };

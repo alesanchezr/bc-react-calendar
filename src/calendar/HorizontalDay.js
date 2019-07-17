@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
-import { DayTimeline } from "./DayTimeline";
-import moment from "moment";
+import { DayBlock } from "./DayBlock";
 import { CalendarContext } from "./Calendar";
 
 const Day = styled.div`
@@ -13,33 +12,25 @@ const Day = styled.div`
 `;
 
 const HorizontalLabel = styled.div`
+  box-sizing: border-box;
   display: block;
-  background: green;
-  min-width: 50px;
+  background: #f1f1f1;
+  padding: 5px;
+  overflow: hidden;
+  ${props => css`
+    min-width: ${props.minWidth}px;
+  `}
 `;
 
-export const DayBlock = ({ days, events }) => {
-  const { dayDirection, viewMode, dayWidth, activeDate } = useContext(
-    CalendarContext
-  );
-  return days.map((d, i) => (
-    <DayTimeline
-      key={i}
-      date={d}
-      width={dayDirection === "horizontal" ? dayWidth : "auto"}
-      isActive={viewMode === "week" && d.diff(activeDate.startOf("day")) === 0}
-      events={events.filter(e => e.start.isBetween(d, moment(d).add(1, "day")))}
-    />
-  ));
-};
 
-export const HorizontalDay = ({ events, days, yAxis }) => {
+export const HorizontalDay = ({ events, days, yAxis, timesToShow }) => {
+  const { yAxisWidth } = useContext(CalendarContext);
   return yAxis.map((row, i) => (
     <Day key={i}>
-      <HorizontalLabel>{row.label}</HorizontalLabel>
+      <HorizontalLabel minWidth={yAxisWidth}>{row.label}</HorizontalLabel>
       <DayBlock
+        timesToShow={timesToShow}
         key={row.index}
-        label={row.label}
         days={days}
         events={row.events}
       />

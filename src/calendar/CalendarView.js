@@ -2,37 +2,78 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Calendar } from "./Calendar.js";
+import moment from "moment";
+
+const getDaysOfWeek = activeDate => {
+  const start = moment(activeDate).startOf("week");
+  const end = moment(activeDate).endOf("week");
+  let days = [start];
+  let current = moment(start).add(1, "day");
+  while (current.isBefore(end)) {
+    days.push(current);
+    current = moment(current).add(1, "day");
+  }
+  return days;
+};
 
 export const CalendarView = ({
   events,
   timeDirection,
   dayDirection,
   onChange,
-  viewMode
-}) => (
-  <div>
-    This is my calendar
-    <Calendar
-      events={events}
-      timeDirection={timeDirection}
-      dayDirection={dayDirection}
-      blockPixelSize={40}
-      onChange={event => onChange && onChange(event)}
-      viewMode={viewMode}
-    />
-  </div>
-);
+  viewMode,
+  dayLabel,
+  blockLabel,
+  timeBlockMinutes,
+  yAxisWidth,
+  activeDate
+}) => {
+    let daysToShow = [];
+    const currentDate = activeDate ? activeDate : moment().startOf("day");
+    if (viewMode === "day") daysToShow = [currentDate];
+    else if (viewMode === "week") daysToShow = getDaysOfWeek(currentDate);
+
+    return (
+        <div>
+            This is my calendar
+
+                        <Calendar
+                            events={events}
+                            daysToShow={daysToShow}
+                            timeDirection={timeDirection}
+                            dayDirection={dayDirection}
+                            blockPixelSize={40}
+                            onChange={event => onChange && onChange(event)}
+                            viewMode={viewMode}
+                            dayLabel={dayLabel}
+                            activeDate={currentDate}
+                            yAxisWidth={yAxisWidth}
+                            blockLabel={blockLabel}
+                        />
+
+        </div>
+    );
+};
 
 CalendarView.propTypes = {
   viewMode: PropTypes.string,
   onChange: PropTypes.func,
+  showPreview: PropTypes.bool,
   events: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-  minTimeMinutesLength: PropTypes.number
+  timeBlockMinutes: PropTypes.number,
+  yAxisWidth: PropTypes.number,
+  blockLabel: PropTypes.node,
+  dayLabel: PropTypes.node,
+  activeDate: PropTypes.object,
 };
 
 CalendarView.defaultProps = {
   viewMode: "day",
   onChange: null,
+  activeDate: null,
   events: [],
-  minTimeMinutesLength: 30
+  dayLabel: null,
+  blockLabel: null,
+  yAxisWidth: 40,
+  timeBlockMinutes: 30
 };

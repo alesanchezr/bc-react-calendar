@@ -7,13 +7,14 @@ import moment from "moment";
 import { ItemTypes, Event } from "./Event";
 
 const Block = styled.div`
-  background: #f1f1f1;
   box-sizing: border-box;
-  border-bottom: 0.1px solid #bdbdbd;
   font-size: 10px;
   position: relative;
+  ${props => props.isOver && css`
+        background: pink;
+    `}
   ${props =>
-    props.direction === "horizontal"
+    props.timeDirection === "horizontal"
       ? css`
           width: ${props.size};
         `
@@ -21,75 +22,66 @@ const Block = styled.div`
           height: ${props.size};
         `}
 
-  ${props =>
-    props.ocupied &&
-    css`
-      background: grey;
-    `}
-
-    ${props =>
-      props.isOver &&
-      css`
-        background: pink;
-      `}
 `;
 
-export const TimeBlock = ({ children, label, events, occupancy, start }) => {
-  const { direction, blockPixelSize, updateEvent } = useContext(
-    CalendarContext
-  );
+const calculateNewEvent = (blockTime, minutesDelta, item, { EVENT, HORIZON_TOP, HORIZON_BOTTOM }) => {
 
-  const [{ isOver }, drop] = useDrop({
-    accept: [ItemTypes.EVENT, ItemTypes.HORIZON_TOP, ItemTypes.HORIZON_BOTTOM],
-    drop: item =>
-      item.type === ItemTypes.EVENT
-        ? updateEvent({
-            index: item.index,
-            start: moment(start),
-            end: moment(start).add(item.duration, "minutes")
-          })
-        : item.type === ItemTypes.HORIZON_TOP
-        ? updateEvent({
-            index: item.index,
-            start: moment(item.start).set({
-              h: start.hour(),
-              m: start.minutes()
-            })
-          })
-        : updateEvent({
-            index: item.index,
-            end: moment(item.start).set({
-              h: start.hour(),
-              m: start.minutes()
-            })
-          }),
-    collect: monitor => ({
-      isOver: !!monitor.isOver()
-    })
-  });
+    let start = (item.type === EVENT) ? moment(blockTime.start) : moment(item.start);
+    let end = (item.type === EVENT) ? moment(blockTime.end) : moment(item.end);
 
-  return (
-    <Block
-      ref={drop}
-      direction={direction}
-      isOver={isOver}
-      size={`${blockPixelSize}px`}
-      ocupied={occupancy.length > 0}
-    >
-      <label>{label}</label>
-      {children}
-    </Block>
-  );
+    if(HORIZON_TOP === item.type) start.set({ h: moment(item.start).add(minutesDelta, "minutes").hour(), m: moment(item.start).add(minutesDelta, "minutes").minutes() })
+    else if(HORIZON_BOTTOM === item.type) end.set({ h: moment(item.end).add(minutesDelta, "minutes").hour(), m: moment(item.end).add(minutesDelta, "minutes").minutes() })
+    else{
+        start.set({ h: moment(item.start).add(minutesDelta, "minutes").hour(), m: moment(item.start).add(minutesDelta, "minutes").minutes() });
+        end.set({ h: moment(item.end).add(minutesDelta, "minutes").hour(), m: moment(item.end).add(minutesDelta, "minutes").minutes() });
+    }
+
+    return {
+        start, end,
+        duration: moment.duration(end.diff(start)).asMinutes()
+    };
+}
+
+export const TimeBlock = ({ children, label, events, occupancy, start, end }) => {
+    const { timeDirection, timeBlockMinutes, blockPixelSize, showPreview, updateEvent, dragMode, toggleDragMode, blockLabel } = useContext(CalendarContext);
+    const [{ isOver }, drop] = useDrop({
+        accept: [ ItemTypes.EVENT, ItemTypes.HORIZON_TOP, ItemTypes.HORIZON_BOTTOM ],
+        drop: (item, monitor) => {
+            let coord = monitor.getDifferenceFromInitialOffset();
+            const minutesDelta = timeDirection === "horizontal" ? Math.round(coord.x / blockPixelSize) * timeBlockMinutes : Math.round(coord.y / blockPixelSize) * timeBlockMinutes;
+            const newEvent = calculateNewEvent({ start, end }, minutesDelta, item, ItemTypes);
+            console.log("Newwwwww: ", timeDirection)
+            let updatedEvent = { index: item.index, start: newEvent.start, end: newEvent.end, duration: newEvent.duration };
+
+            if(showPreview) toggleDragMode(false);
+            updateEvent(updatedEvent);
+        },
+        collect: monitor => ({
+            isOver: !!monitor.isOver()
+        })
+    });
+
+    return (
+        <Block
+            ref={drop}
+            timeDirection={timeDirection}
+            isOver={isOver}
+            dragMode={dragMode}
+            size={`${blockPixelSize}px`}
+            ocupied={occupancy.length > 0}
+        >
+            {blockLabel && blockLabel(start, end, events, occupancy)}
+            {children}
+        </Block>
+    );
 };
 TimeBlock.propTypes = {
   events: PropTypes.array,
   occupancy: PropTypes.array,
   start: PropTypes.object.isRequired,
-  label: PropTypes.string
 };
 
 TimeBlock.defaultProps = {
-  label: "",
   events: null,
   occupancy: []
 };
