@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Calendar } from "./Calendar.js";
+import Calendar from "./Calendar.js";
 import moment from "moment";
 
 const getDaysOfWeek = activeDate => {
@@ -15,7 +15,7 @@ const getDaysOfWeek = activeDate => {
   return days;
 };
 
-export const CalendarView = ({
+const CalendarView = ({
   events,
   timeDirection,
   dayDirection,
@@ -83,3 +83,5 @@ CalendarView.defaultProps = {
   yAxisWidth: 40,
   timeBlockMinutes: 30
 };
+
+export default CalendarView;

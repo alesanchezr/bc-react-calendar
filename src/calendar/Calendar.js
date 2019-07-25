@@ -60,7 +60,7 @@ const generateAxis = events => {
   return axis;
 };
 
-export const Calendar = ({ daysToShow, events, onChange, ...rest }) => {
+const Calendar = ({ daysToShow, events, onChange, ...rest }) => {
 
     //calendar active date
     const activeDate = rest.activeDate ? rest.activeDate : moment().startOf("day");
@@ -197,3 +197,5 @@ Calendar.defaultProps = {
   dayLabel: null,
   blockLabel: null
 };
+
+export default Calendar;

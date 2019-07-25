@@ -1,3 +1,3 @@
-import { CalendarView } from "./CalendarView.js";
 
-export default CalendarView;
+export const CalendarView = require("./CalendarView").default;
+export const Calendar = require("./Calendar").default;
