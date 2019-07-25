@@ -1,5 +1,5 @@
 {
-  "name": "@breathecode/react-calendar",
+  "name": "bc-react-calendar",
   "version": "1.0.0",
   "description": "Calendar component for react",
   "main": "dist/index.js",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/breatheco-de/react-components.git"
+    "url": "git+https://github.com/alesanchezr/bc-react-calendar.git"
   },
   "babel": {
     "presets": [
@@ -34,9 +34,9 @@
   "author": "Alejandro Sanchez",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/breatheco-de/react-components/issues"
+    "url": "https://github.com/alesanchezr/bc-react-calendar/issues"
   },
-  "homepage": "https://github.com/breatheco-de/react-components#readme",
+  "homepage": "https://github.com/alesanchezr/bc-react-calendar#readme",
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
@@ -49,6 +49,7 @@
     "@storybook/addons": "^5.0.6",
     "@storybook/react": "^5.0.9",
     "babel-loader": "^8.0.0-beta.6",
+    "gh-pages": "^2.0.1",
     "webpack": "^4.31.0",
     "webpack-cli": "^3.0.3"
   },
