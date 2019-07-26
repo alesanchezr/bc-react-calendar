@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import Calendar from "./Calendar.js";
 import moment from "moment";
 
+import styled, { css } from "styled-components";
+
 const getDaysOfWeek = activeDate => {
   const start = moment(activeDate).startOf("week");
   const end = moment(activeDate).endOf("week");
@@ -14,6 +16,14 @@ const getDaysOfWeek = activeDate => {
   }
   return days;
 };
+
+const DayPicker = styled.div`
+    box-sizing: border-box;
+    font-size: 10px;
+    display: flex;
+    position: relative;
+    flex-direction: row;
+`;
 
 const CalendarView = ({
   events,
@@ -33,24 +43,25 @@ const CalendarView = ({
 
     return (
         <div>
-            This is my calendar
-
-                        <Calendar
-                            events={events}
-                            daysToShow={daysToShow}
-                            timeDirection={timeDirection}
-                            dayDirection={dayDirection}
-                            blockPixelSize={40}
-                            onChange={event => onChange && onChange(event)}
-                            viewMode={viewMode}
-                            dayLabel={dayLabel}
-                            activeDate={currentDate}
-                            yAxisWidth={yAxisWidth}
-                            blockLabel={blockLabel}
-                            showFrom={5}
-                            showUntil={24}
-                        />
-
+            <DayPicker>
+                <button>Day</button>
+                <button>Week</button>
+            </DayPicker>
+            <Calendar
+                events={events}
+                daysToShow={daysToShow}
+                timeDirection={timeDirection}
+                dayDirection={dayDirection}
+                blockPixelSize={40}
+                onChange={event => onChange && onChange(event)}
+                viewMode={viewMode}
+                dayLabel={dayLabel}
+                activeDate={currentDate}
+                yAxisWidth={yAxisWidth}
+                blockLabel={blockLabel}
+                showFrom={5}
+                showUntil={24}
+            />
         </div>
     );
 };

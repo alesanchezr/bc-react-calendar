@@ -46,6 +46,7 @@ const getLayout = {
 
 const generateAxis = events => {
   let axis = [];
+  if(typeof(events) !== "object") throw new Error('The events property must be an object');
   for (let key in events) {
     axis.push({
       label: key,

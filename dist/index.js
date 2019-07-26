@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["@breathecode/ui-components"] = factory();
+		exports["bc-react-calendar"] = factory();
 	else
-		root["@breathecode/ui-components"] = factory();
+		root["bc-react-calendar"] = factory();
 })(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -12229,6 +12229,8 @@ function Calendar_objectWithoutProperties(source, excluded) { if (source == null
 
 function Calendar_objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function Calendar_templateObject5() {
   var data = Calendar_taggedTemplateLiteral(["\n    flex-direction: column;\n  "]);
 
@@ -12303,6 +12305,7 @@ var getLayout = {
 
 var Calendar_generateAxis = function generateAxis(events) {
   var axis = [];
+  if (_typeof(events) !== "object") throw new Error('The events property must be an object');
 
   var _loop = function _loop(key) {
     axis.push({
@@ -26908,6 +26911,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Calendar_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(0);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["\n    box-sizing: border-box;\n    font-size: 10px;\n    display: flex;\n    position: relative;\n    flex-direction: row;\n"]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
 
 
 
@@ -26927,6 +26944,8 @@ var getDaysOfWeek = function getDaysOfWeek(activeDate) {
   return days;
 };
 
+var DayPicker = styled_components__WEBPACK_IMPORTED_MODULE_4__[/* default */ "b"].div(_templateObject());
+
 var CalendarView = function CalendarView(_ref) {
   var events = _ref.events,
       timeDirection = _ref.timeDirection,
@@ -26940,7 +26959,7 @@ var CalendarView = function CalendarView(_ref) {
   var daysToShow = [];
   var currentDate = activeDate ? activeDate : moment__WEBPACK_IMPORTED_MODULE_3___default()().startOf("day");
   if (viewMode === "day") daysToShow = [currentDate];else if (viewMode === "week") daysToShow = getDaysOfWeek(currentDate);
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "This is my calendar", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Calendar_js__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(DayPicker, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", null, "Day"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", null, "Week")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Calendar_js__WEBPACK_IMPORTED_MODULE_2__["default"], {
     events: events,
     daysToShow: daysToShow,
     timeDirection: timeDirection,

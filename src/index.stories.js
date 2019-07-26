@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { CalendarView, Calendar } from "./calendar/index.js";
 import { simpleEvents, nestedEvents } from "./data";
 import styled, { css } from "styled-components";
+import moment from "moment";
 
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
@@ -26,7 +27,6 @@ const BlockLabel = styled.label`
 
 storiesOf('CalendarView', module).add('horizontal configuration', () => (<div>
     <CalendarView
-        events={object('events', nestedEvents)}
         timeDirection={select('timeDirection', ['horizontal','vertical'], 'horizontal')}
         dayDirection={select('dayDirection', ['horizontal','vertical'], 'vertical')}
         onChange={(value) => action('onChange')(value)}
@@ -34,7 +34,7 @@ storiesOf('CalendarView', module).add('horizontal configuration', () => (<div>
         timeBlockMinutes={number('timeBlockMinutes',10)}
         yAxisWidth={number('yAxisWidth',60)}
         dayLabel={(day, active) => <DayLabel active={active}>{day.format("dddd")}</DayLabel>}
-
+        events={object('events', nestedEvents)}
     />
 </div>));
 
@@ -44,7 +44,6 @@ storiesOf('CalendarView', module).add('horizontal configuration', () => (<div>
 
 storiesOf('CalendarView', module).add('vertical configuration', () => (<div>
         <CalendarView
-          events={object('events', simpleEvents)}
           timeDirection={select('timeDirection', ['horizontal','vertical'], 'vertical')}
           dayDirection={select('dayDirection', ['horizontal','vertical'], 'horizontal')}
           viewMode={select('viewMode', ['day','week'], "week")}
@@ -53,5 +52,26 @@ storiesOf('CalendarView', module).add('vertical configuration', () => (<div>
           timeBlockMinutes={number('timeBlockMinutes',30)}
           dayLabel={(day, active) => <DayLabel>{day.format("dddd")}</DayLabel>}
           blockLabel={(start, end, events, occupancy) => <BlockLabel>{start.format("dddd h:m a")} ({events ? events.length: 0})</BlockLabel>}
+          events={object('events', simpleEvents)}
+        />
+</div>));
+
+/**
+ *  Actionable Item
+ */
+
+storiesOf('Calendar', module).add('horizontal configuration', () => (<div>
+        <Calendar
+            daysToShow={object('daysToShow', [moment().startOf("day")])}
+            timeDirection={select('timeDirection', ['horizontal','vertical'], 'horizontal')}
+            dayDirection={select('dayDirection', ['horizontal','vertical'], 'vertical')}
+            blockPixelSize={number('blockPixelSize',40)}
+            onChange={(value) => action('onChange')(value)}
+            viewMode={select('viewMode', ['day','week'], "day")}
+            activeDate={object('activeDate',moment().startOf("day"))}
+            yAxisWidth={number('yAxisWidth',60)}
+            showFrom={number('showFrom',5)}
+            showUntil={number('showUntil',24)}
+            events={object('events', nestedEvents)}
         />
 </div>));

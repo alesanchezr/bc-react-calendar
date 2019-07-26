@@ -31,7 +31,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, "dist"),
         filename: 'index.js',
-        library: '@breathecode/ui-components',
+        library: 'bc-react-calendar',
         globalObject: 'typeof self !== \'undefined\' ? self : this',
         libraryTarget: 'umd'
     },
