@@ -2,23 +2,19 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { CalendarView, Calendar } from "./calendar/index.js";
 import { simpleEvents, nestedEvents } from "./data";
-import styled, { css } from "styled-components";
 import moment from "moment";
 
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { text, boolean, number, array, object, select } from '@storybook/addon-knobs';
 
-const DayLabel = styled.h2`
-    width: 100%;
-    margin: 0;
-    ${props => css`
-        background: ${props.active ? "orange" : "#f1f1f1"}
-    `}
-`;
+const DayLabel = ({children, active}) => <h2 style={{
+    width: "100%",
+    margin: 0,
+    background: active ? "orange" : "#f1f1f1"
+    }}>{children}</h2>
 
-const BlockLabel = styled.label`
-`;
+const BlockLabel = ({children}) => <label>{children}</label>;
 
 
 /**

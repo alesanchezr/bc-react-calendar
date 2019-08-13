@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import Calendar from "./Calendar.js";
 import moment from "moment";
 
-import styled, { css } from "styled-components";
-
 const getDaysOfWeek = activeDate => {
   const start = moment(activeDate).startOf("week");
   const end = moment(activeDate).endOf("week");
@@ -17,13 +15,14 @@ const getDaysOfWeek = activeDate => {
   return days;
 };
 
-const DayPicker = styled.div`
-    box-sizing: border-box;
-    font-size: 10px;
-    display: flex;
-    position: relative;
-    flex-direction: row;
-`;
+const datePickerStyles = {
+    boxSizing: "border-box",
+    fontSize: "10px",
+    display: "flex",
+    position: "relative",
+    flexDirection: "row"
+};
+const DayPicker = (props) => <div style={datePickerStyles}>{props.children}</div>;
 
 const CalendarView = ({
   events,

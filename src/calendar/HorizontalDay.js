@@ -1,25 +1,22 @@
 import React, { useContext } from "react";
-import styled, { css } from "styled-components";
 import { DayBlock } from "./DayBlock";
 import { CalendarContext } from "./Calendar";
 
-const Day = styled.div`
-  box-sizing: border-box;
-  width: 100%;
-  display: flex;
-  justify-content: left;
-`;
+const Day = (props) => <div style={{
+  boxSizing: "border-box",
+  width: "100%",
+  display: "flex",
+  justifyContent: "left"
+}}>{props.children}</div>;
 
-const HorizontalLabel = styled.div`
-  box-sizing: border-box;
-  display: block;
-  background: #f1f1f1;
-  padding: 5px;
-  overflow: hidden;
-  ${props => css`
-    min-width: ${props.minWidth}px;
-  `}
-`;
+const HorizontalLabel = (props) => <div style={{
+    boxSizing: "border-box",
+    display: "block",
+    background: "#f1f1f1",
+    padding: "5px",
+    overflow: "hidden",
+    minWidth: `${props.minWidth}px`
+}}>{props.children}</div>;
 
 
 export const HorizontalDay = ({ events, days, yAxis, timesToShow }) => {

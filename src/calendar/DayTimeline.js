@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import styled, { css } from "styled-components";
 import moment from "moment";
 import { TimeBlock } from "./TimeBlock";
 import { Event } from "./Event";
@@ -10,31 +9,19 @@ export const ItemTypes = {
   EVENT: "event"
 };
 
-const Day = styled.div`
-  box-sizing: border-box;
-  font-size: 10px;
-  border-right: 1px solid grey;
-  display: flex;
-  position: relative;
-
-  ${props => css`
-    width: ${props.width};
-  `}
-
-`;
-
-const getDayComponent = {
-  horizontal: styled(Day)`
-    flex-direction: row;
-  `,
-  vertical: styled(Day)`
-    flex-direction: column;
-  `
-};
+const dayStyles = (props) => ({
+    boxSizing: "border-box",
+    fontSize: "10px",
+    borderRight: "1px solid grey",
+    display: "flex",
+    position: "relative",
+    width: props.width,
+    flexDirection: props.direction === "horizontal" ? "row" : "column"
+});
+const Day = (props) => <div style={dayStyles(props)}>{props.children}</div>
 
 export const DayTimeline = ({ events, date, isActive, width, timesToShow }) => {
     const { timeDirection, dayLabel } = useContext(CalendarContext);
-    const DayComponent = getDayComponent[timeDirection];
 
     const times = timesToShow.map(({ startTime,  endTime, ...rest }, i) => {
         const start = moment(date).set({ h: startTime.hours(), m: startTime.minutes() });
@@ -57,7 +44,7 @@ export const DayTimeline = ({ events, date, isActive, width, timesToShow }) => {
 
   if (!date) return "Loading...";
   return (
-    <DayComponent width={width} active={isActive}>
+    <Day width={width} active={isActive}>
       {timeDirection === "vertical" && dayLabel && dayLabel(date)}
       {times.map(t => (
         <TimeBlock
@@ -72,7 +59,7 @@ export const DayTimeline = ({ events, date, isActive, width, timesToShow }) => {
           ))}
         </TimeBlock>
       ))}
-    </DayComponent>
+    </Day>
   );
 };
 

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import styled,{ css } from "styled-components";
 import { DndProvider } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 import { HorizontalDay } from "./HorizontalDay";
@@ -11,38 +10,26 @@ export const CalendarContext = React.createContext(null);
 
 // Create a <Title> react component that renders an <h1> which is
 // centered, palevioletred and sized at 1.5em
-const Frame = styled.div`
-  box-sizing: border-box;
-  width: 100%;
-  overflow-y: auto;
-  display: flex;
-  justify-content: space-evenly;
-`;
+const layoutStyles = (direction) => ({
+  boxSizing: "border-box",
+  width: "100%",
+  overflowY: "auto",
+  display: "flex",
+  justifyContent: "space-evenly",
+  flexDirection: direction == "horizontal" ? "row" : "column"
+});
+const Layout = ({ direction, children }) => <div style={layoutStyles(direction)}>{children}</div>
 
-const Time = styled.ul`
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    font-size: 12px;
-    background: #b1b1b1;
-    li{
-        display: inline-block;
-        list-style: none;
-    }
-    ${props => css`
-        margin-left: ${props.yAxisWidth}px;
-        width: ${props.width}px;
-    `}
-`;
-
-const getLayout = {
-  horizontal: styled(Frame)`
-    flex-direction: row;
-  `,
-  vertical: styled(Frame)`
-    flex-direction: column;
-  `
-};
+const timeStyles = (props) => ({
+    width: "100%",
+    margin: 0,
+    padding: 0,
+    fontSize: "12px",
+    background: "#b1b1b1",
+    marginLeft: `${props.yAxisWidth}px`,
+    width: !props.width ? "100%" : `${props.width}px`
+});
+const Time = (props) => <ul style={timeStyles(props)}>{props.children}</ul>;
 
 const generateAxis = events => {
   let axis = [];
@@ -94,9 +81,8 @@ const Calendar = ({ daysToShow, events, onChange, ...rest }) => {
     });
 
     if (!daysToShow) return "Loading...";
-    const Layout = getLayout[direction.days];
     return (
-        <Layout>
+        <Layout direction={direction.days}>
         <DndProvider backend={HTML5Backend}>
             <CalendarContext.Provider
             value={{
@@ -141,7 +127,15 @@ const Calendar = ({ daysToShow, events, onChange, ...rest }) => {
                                 </div>
                             }
                             <Time yAxisWidth={rest.yAxisWidth} width={(60 * 24) / rest.timeBlockMinutes * rest.blockPixelSize}>
-                                {times.map((t, i) => <li key={i} style={{ width: rest.blockPixelSize+"px" }}>{t.startTime.minutes() === 0 && t.startTime.format('ha')}</li>)}
+                                {times.map((t, i) =>
+                                    <li key={i} style={{
+                                        width: rest.blockPixelSize+"px",
+                                        display: "inline-block",
+                                        listStyle: "none"
+                                    }}>
+                                        {t.startTime.minutes() === 0 && t.startTime.format('ha')}
+                                    </li>
+                                )}
                             </Time>
                         </div>
                     )}

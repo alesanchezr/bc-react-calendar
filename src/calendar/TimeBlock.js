@@ -1,28 +1,18 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import styled, { css } from "styled-components";
 import { CalendarContext } from "./Calendar";
 import { useDrop } from "react-dnd";
 import moment from "moment";
 import { ItemTypes } from "./Event";
 
-const Block = styled.div`
-  box-sizing: border-box;
-  font-size: 10px;
-  position: relative;
-  ${props => props.isOver && css`
-        background: pink;
-    `}
-  ${props =>
-    props.timeDirection === "horizontal"
-      ? css`
-          width: ${props.size};
-        `
-      : css`
-          height: ${props.size};
-        `}
-
-`;
+const Block = React.forwardRef((props, ref) => <div ref={ref} style={{
+    boxSizing: "border-box",
+    fontSize: "10px",
+    position: "relative",
+    backgorund: props.isOver ? "pink" : "inherit",
+    width: props.timeDirection === "horizontal" ? props.size : "auto",
+    height: props.timeDirection !== "horizontal" ? props.size : "auto"
+}}>{props.children}</div>);
 
 const calculateNewEvent = (blockTime, minutesDelta, item, { EVENT, HORIZON_TOP, HORIZON_BOTTOM }) => {
 

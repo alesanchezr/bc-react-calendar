@@ -1,59 +1,69 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import styled, { css } from "styled-components";
 import { CalendarContext } from "./Calendar";
 import { useDrag } from "react-dnd";
+import { log } from "./utils.js";
 export const ItemTypes = {
   EVENT: "event",
   HORIZON_TOP: "event-horizon-top",
   HORIZON_BOTTOM: "event-horizon-bottom"
 };
 
-const EventBlock = styled.div`
-    background: blue;
-    border: 1px solid black;
-    position: absolute;
-    width: 90%;
-    top: 0;
-    left: 0;
-    cursor: pointer;
-    opacity: 0.95;
-    z-index: 10;
-    ${props => css`
-        margin-left: ${props.index * 2}px;
-        margin-top: ${props.offset}px;
-    `}
+const eventBlockStyles = (props) => ({
+    background: "blue",
+    border: "1px solid black",
+    position: "absolute",
+    width: "90%",
+    top: 0,
+    left: 0,
+    cursor: "pointer",
+    opacity: 0.95,
+    zIndex: props.isPreview ? -1 : 10,
+    marginLeft: `${props.index * 2}px`,
+    marginTop: `${props.offset}px`,
+    opacity: props.isDragging ? 0.4 : 1,
+    width: props.direction === "horizontal" ? props.size : "auto",
+    height: props.direction !== "horizontal" ? props.size : "auto",
+});
+const EventBlock = React.forwardRef((props, ref) => <div ref={ref} style={eventBlockStyles(props)}>{props.children}</div>);
 
-    ${props => props.isDragging && css`
-        opacity: 0.4;
-    `}
+const EventLabel = (props) => <label style={{
+        float: "left",
+        margin: "5px",
+        fontSize: "12px",
+        zIndex: 10
+    }}>{props.children}</label>;
 
-    ${props => props.isPreview && css`
-        z-index: -1;
-    `}
+const Invisible = (props) => <div style={{
+  position: "relative",
+  width: "100%",
+  height: "100%"
+}}>{props.children}</div>;
 
-    ${props =>
-      props.direction === "horizontal"
-        ? css`
-            width: ${props.size};
-          `
-        : css`
-            height: ${props.size};
-          `};
-`;
-
-const EventLabel = styled.label`
-  float: left;
-  margin: 5px;
-  font-size: 12px;
-  z-index: 10;
-`;
-const Invisible = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-`;
-
+const horizonStyles = (props) => {
+    let result = {
+        position: "absolute",
+        zIndex: 9,
+        fontSize: "10px",
+        fontWeight: 900,
+        textAlign: "center",
+        margin: "auto",
+        width: ["top", "bottom"].includes(props.orientation) ? "100%" : "10px",
+        height: !["top", "bottom"].includes(props.orientation) ? "auto" : "10px",
+        transform: `rotate(${["top", "bottom"].includes(props.orientation) ? "0" : "90"}deg)`,
+        //background: "black",
+        //opacity: 0.2,
+    };
+    result[props.orientation] = "0px";
+    return result;
+//   :hover {
+//     ${props => css`
+//       cursor: ${["top", "bottom"].includes(props.orientation)
+//         ? "ns-resize"
+//         : "ew-resize"};
+//     `}
+//   }
+};
 const Horizon = ({ className, orientation, eventStart, eventEnd, duration, index }) => {
     const { toggleDragMode } = useContext(CalendarContext);
     const [props, drag] = useDrag({
@@ -70,34 +80,11 @@ const Horizon = ({ className, orientation, eventStart, eventEnd, duration, index
         begin: monitor => toggleDragMode(true)
     });
     return (
-        <div ref={drag} className={className}>
+        <div ref={drag} style={horizonStyles({orientation})} className={className}>
         <i>{"="}</i>
         </div>
     );
 };
-const HorizonStyled = styled(Horizon)`
-    position: absolute;
-    z-index: 9;
-    font-size: 10px;
-    font-weight: 900;
-    text-align: center;
-    margin: auto;
-  ${props => css`
-    ${props.orientation}: 0px;
-    width: ${["top", "bottom"].includes(props.orientation) ? "100%" : "10px"};
-    transform: rotate(${["top", "bottom"].includes(props.orientation) ? "0" : "90"}deg);
-  `}
-  :hover {
-    opacity: 0.2;
-    height: 8px;
-    background: black;
-    ${props => css`
-      cursor: ${["top", "bottom"].includes(props.orientation)
-        ? "ns-resize"
-        : "ew-resize"};
-    `}
-  }
-`;
 
 export const Event = ({ label, start, end, duration, index, isPreview, offset }) => {
     const { timeDirection, blockPixelSize, timeBlockMinutes, toggleDragMode } = useContext(CalendarContext);
@@ -108,7 +95,7 @@ export const Event = ({ label, start, end, duration, index, isPreview, offset })
                 isDragging: !!monitor.isDragging()
             })
         },
-        begin: monitor => toggleDragMode(true)
+        begin: monitor => log("Begin dragging") || toggleDragMode(true)
     });
 
     return (
@@ -123,7 +110,7 @@ export const Event = ({ label, start, end, duration, index, isPreview, offset })
         >
             { !isPreview &&
                 <Invisible>
-                    <HorizonStyled
+                    <Horizon
                         index={index}
                         orientation={timeDirection === "vertical" ? "top" : "left"}
                         eventStart={start}
@@ -131,7 +118,7 @@ export const Event = ({ label, start, end, duration, index, isPreview, offset })
                         eventEnd={end}
                     />
                     <EventLabel>{label}</EventLabel>
-                    <HorizonStyled
+                    <Horizon
                         index={index}
                         orientation={timeDirection === "vertical" ? "bottom" : "right"}
                         eventStart={start}
