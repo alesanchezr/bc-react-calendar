@@ -9,7 +9,7 @@ const Block = React.forwardRef((props, ref) => <div ref={ref} style={{
     boxSizing: "border-box",
     fontSize: "10px",
     position: "relative",
-    backgorund: props.isOver ? "pink" : "inherit",
+    background: props.isOver ? "pink" : "inherit",
     width: props.timeDirection === "horizontal" ? props.size : "auto",
     height: props.timeDirection !== "horizontal" ? props.size : "auto"
 }}>{props.children}</div>);

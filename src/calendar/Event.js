@@ -51,18 +51,12 @@ const horizonStyles = (props) => {
         width: ["top", "bottom"].includes(props.orientation) ? "100%" : "10px",
         height: !["top", "bottom"].includes(props.orientation) ? "auto" : "10px",
         transform: `rotate(${["top", "bottom"].includes(props.orientation) ? "0" : "90"}deg)`,
+		cursor: ["top", "bottom"].includes(props.orientation) ? "ns-resize": "ew-resize",
         //background: "black",
         //opacity: 0.2,
     };
     result[props.orientation] = "0px";
     return result;
-//   :hover {
-//     ${props => css`
-//       cursor: ${["top", "bottom"].includes(props.orientation)
-//         ? "ns-resize"
-//         : "ew-resize"};
-//     `}
-//   }
 };
 const Horizon = ({ className, orientation, eventStart, eventEnd, duration, index }) => {
     const { toggleDragMode } = useContext(CalendarContext);

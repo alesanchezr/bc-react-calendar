@@ -44,7 +44,7 @@ export const DayTimeline = ({ events, date, isActive, width, timesToShow }) => {
 
   if (!date) return "Loading...";
   return (
-    <Day width={width} active={isActive}>
+    <Day width={width} active={isActive} direction={timeDirection}>
       {timeDirection === "vertical" && dayLabel && dayLabel(date)}
       {times.map(t => (
         <TimeBlock
