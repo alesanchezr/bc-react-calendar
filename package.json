@@ -55,7 +55,7 @@
     "webpack-cli": "^3.0.3"
   },
   "dependencies": {
-    "moment": "2.24.0",
+    "moment": "2.29.4",
     "prop-types": "15.7.2",
     "react": "16.8.6",
     "react-dnd": "9.2.1",
